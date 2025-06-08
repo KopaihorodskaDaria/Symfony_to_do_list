@@ -1,0 +1,35 @@
+###> symfony/framework-bundle ###
+/.env.local
+/.env.local.php
+/.env.*.local
+/config/secrets/prod/prod.decrypt.private.php
+/public/bundles/
+/var/
+/vendor/
+###< symfony/framework-bundle ###
+
+###> docker ###
+/docker-compose.override.yml
+/mysql_data/
+###< docker ###
+
+###> IDEs ###
+.idea/
+.vscode/
+###< IDEs ###
+
+###> macOS ###
+.DS_Store
+###< macOS ###
+
+###> PHPUnit ###
+/phpunit.xml
+/phpunit.xml.dist
+/coverage/
+###< PHPUnit ###
+
+
+###> Logs and Cache ###
+/var/log/
+/var/cache/
+###< Logs and Cache ###

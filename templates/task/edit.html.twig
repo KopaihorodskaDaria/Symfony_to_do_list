@@ -1,0 +1,17 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Edit Task{% endblock %}
+
+{% block body %}
+    <h1>Edit Task</h1>
+
+    {{ form_start(form) }}
+    {{ form_row(form.title) }}
+    {{ form_row(form.description) }}
+    {{ form_row(form.isDone) }}
+    <button type="submit">Save changes</button>
+    {{ form_end(form) }}
+
+    <p><a href="{{ path('task_index') }}">Back to list</a></p>
+{% endblock %}
+

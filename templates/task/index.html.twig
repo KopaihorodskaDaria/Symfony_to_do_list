@@ -1,0 +1,44 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Your Tasks{% endblock %}
+
+{% block body %}
+    <h1>Your Tasks</h1>
+
+    {{ form_start(form) }}
+    {{ form_row(form.title) }}
+    {{ form_row(form.description) }}
+    <button type="submit">Add Task</button>
+    {{ form_end(form) }}
+
+    {% if tasks is empty %}
+        <p>There are no tasks here.</p>
+    {% else %}
+        <ul class="task-list">
+            {% for task in tasks %}
+                <li class="task-card">
+                    <div class="task-details">
+                        <p class="task-title">{{ task.title }}</p>
+                        <p class="task-description">{{ task.description }}</p>
+                        {% if task.isDone %}
+                            <p class="task-status">✓ Completed</p>
+                        {% endif %}
+                    </div>
+                    <div class="task-actions">
+                        <form action="{{ path('task_delete', {id: task.id}) }}" method="post">
+                            <button type="submit">Delete</button>
+                        </form>
+
+                        <a href="{{ path('task_edit', {id: task.id}) }}">Edit</a>
+                    </div>
+                </li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+
+    <a class="logout-link" href="{{ path('app_logout') }}">Logout</a>
+{% endblock %}
+
+
+
+

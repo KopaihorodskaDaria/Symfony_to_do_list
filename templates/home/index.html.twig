@@ -1,0 +1,13 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Welcome!{% endblock %}
+
+{% block body %}
+    <div class="center-form">
+        <h1>Welcome to To-Do List ✅</h1>
+        <a href="{{ path('app_login') }}" class="btn">Login</a>
+        <a href="{{ path('app_register') }}" class="btn">Register</a>
+    </div>
+{% endblock %}
+
+
