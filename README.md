@@ -2,7 +2,7 @@
 A task management web application built with **Symfony**.  
 The project includes user authentication, email verification, password reset, task categories, deadline highlighting, drag & drop between statuses, task filtering, and more.
 
-##Backend:
+**Backend:**
 - PHP 8.2+
 - Symfony 7.3 
 - Doctrine ORM + Migrations
@@ -14,21 +14,21 @@ including token generation, custom HTML email templates, and login blocking for 
 - Docker / Docker Compose
 - PHPUnit
 
-##Frontend:
+**Frontend:**
 HTML5, CSS3, JavaScript
 Twig templating engine
 SortableJS (for drag & drop functionality)
 Flatpickr (date picker)
 Custom CSS styles
 
-##Database:
-MySQL
+**Database:**
+- MySQL
 
-##Environment & Tools:
+**Environment & Tools:**
 - Docker (for local development)
 - MailHog (for testing email functionality)
 
-##Key Features:
+**Key Features:**
 * User registration & login
 * Email verification (unverified users cannot log in)
 * Password reset functionality
@@ -39,15 +39,12 @@ MySQL
 * Drag & drop task reordering between statuses (To Do, In Progress, Done)
 * Statistics page with task status diagram
 
-##Running the Project
+**Running the Project**
 1. Make sure you have Docker and Docker Compose installed.
 2. Clone the repository
 3. Build and start the Docker containers
 ```bash
 docker compose up -d --build
-```
-```bash
-docker compose exec php composer install
 ```
 4. Create the database and run migrations:
 ```bash
@@ -56,7 +53,7 @@ docker compose exec php php bin/console doctrine:migrations:migrate
 ```
 5. Visit: http://localhost:8080
 
-##Testing
+**Testing**
 Run PHPUnit tests:
 ```bash
 docker compose exec php php bin/phpunit
