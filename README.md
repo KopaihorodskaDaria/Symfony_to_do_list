@@ -40,16 +40,27 @@ MySQL
 * Statistics page with task status diagram
 
 ##Running the Project
+1. Make sure you have Docker and Docker Compose installed.
+2. Clone the repository
+3. Build and start the Docker containers
 ```bash
-docker compose up -d
+docker compose up -d --build
 ```
-
-Visit: http://localhost:8080
+```bash
+docker compose exec php composer install
+```
+4. Create the database and run migrations:
+```bash
+docker compose exec php php bin/console doctrine:database:create
+docker compose exec php php bin/console doctrine:migrations:migrate
+```
+5. Visit: http://localhost:8080
 
 ##Testing
 Run PHPUnit tests:
 ```bash
-php bin/phpunit
+docker compose exec php php bin/phpunit
+
 ```
 
 
