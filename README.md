@@ -52,6 +52,7 @@ docker compose exec php php bin/console doctrine:database:create
 docker compose exec php php bin/console doctrine:migrations:migrate
 ```
 5. Visit: http://localhost:8080
+6. All emails sent by the application can be viewed through the Mailer web interface at http://localhost:8025.
 
 **Testing**
 Run PHPUnit tests:
