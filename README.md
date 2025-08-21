@@ -19,8 +19,6 @@ This project offers user-friendly features including registration, login, email 
 - Doctrine ORM + Migrations
 - SymfonyCasts ResetPasswordBundle
 - SymfonyCasts VerifyEmailBundle
-(Used SymfonyCasts ResetPasswordBundle and VerifyEmailBundle as a base, extending them with custom services for email verification and security checks, 
-including token generation, custom HTML email templates, and login blocking for unverified accounts.)
 - Symfony Mailer
 - Docker / Docker Compose
 - PHPUnit
