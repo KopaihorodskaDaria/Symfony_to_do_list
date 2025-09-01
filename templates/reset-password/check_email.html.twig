@@ -1,0 +1,11 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Check your email</h1>
+
+    <p>If account with that email exists, you will receive a reset link shortly.</p>
+    <p>The link is valid only for a limited time. Please check your email.</p>
+
+    <a href="{{ path('app_login') }}">Back to login</a>
+
+{% endblock %}

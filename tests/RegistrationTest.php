@@ -44,10 +44,10 @@ class RegistrationTest extends WebTestCase
         $email='';
         $plainPassword='Password1212';
 
-        $form=$crawler->selectButton('Register')->form([
-            'registration_form[email]'=>$email,
-            'registration_form[first]'=>$plainPassword,
-            'registration_form[second]'=>$plainPassword,
+        $form = $crawler->selectButton('Register')->form([
+            'registration_form[email]' => $email,
+            'registration_form[plainPassword][first]' => $plainPassword,
+            'registration_form[plainPassword][second]' => $plainPassword,
         ]);
         $client->submit($form);
 
@@ -63,10 +63,10 @@ class RegistrationTest extends WebTestCase
         $email='x@y.z';
         $plainPassword='Password1212';
 
-        $form=$crawler->selectButton('Register')->form([
-            'registration_form[email]'=>$email,
-            'registration_form[first]'=>$plainPassword,
-            'registration_form[second]'=>$plainPassword,
+        $form = $crawler->selectButton('Register')->form([
+            'registration_form[email]' => $email,
+            'registration_form[plainPassword][first]' => $plainPassword,
+            'registration_form[plainPassword][second]' => $plainPassword,
         ]);
         $client->submit($form);
 
@@ -80,7 +80,7 @@ class RegistrationTest extends WebTestCase
         $client = static::createClient();
         $crawler = $client->request('GET', '/register');
 
-        $email = str_repeat('a', 101) . '@example.com'; // 101+ символів
+        $email = str_repeat('a', 101) . '@example.com';
         $plainPassword = 'Password123';
 
         $form = $crawler->selectButton('Register')->form([
@@ -102,10 +102,10 @@ class RegistrationTest extends WebTestCase
         $email='test1';
         $plainPassword='Password1212';
 
-        $form=$crawler->selectButton('Register')->form([
-            'registration_form[email]'=>$email,
-            'registration_form[first]'=>$plainPassword,
-            'registration_form[second]'=>$plainPassword,
+        $form = $crawler->selectButton('Register')->form([
+            'registration_form[email]' => $email,
+            'registration_form[plainPassword][first]' => $plainPassword,
+            'registration_form[plainPassword][second]' => $plainPassword,
         ]);
         $client->submit($form);
 
@@ -122,7 +122,7 @@ class RegistrationTest extends WebTestCase
         $email = 'testing@example.com';
         $plainPassword = 'Password123';
 
-        // Створюємо користувача у БД
+        // creating user
         $user = new User();
         $user->setEmail($email);
         $user->setPassword(
@@ -132,7 +132,7 @@ class RegistrationTest extends WebTestCase
         $entityManager->persist($user);
         $entityManager->flush();
 
-        // Спроба зареєструватися з тим самим email
+        // register with the same email
         $crawler = $client->request('GET', '/register');
         $form = $crawler->selectButton('Register')->form([
             'registration_form[email]' => $email,
@@ -144,7 +144,7 @@ class RegistrationTest extends WebTestCase
         $this->assertResponseStatusCodeSame(422);
         $this->assertSelectorTextContains('ul li', 'Account with this email already exists');
 
-        // Очищуємо тестового користувача
+        // delete testing user
         $entityManager->remove($user);
         $entityManager->flush();
     }
@@ -157,10 +157,10 @@ class RegistrationTest extends WebTestCase
         $email = 'test2@example.com';
         $plainPassword = 'pass';
 
-        $form=$crawler->selectButton('Register')->form([
-            'registration_form[email]'=>$email,
-            'registration_form[first]'=>$plainPassword,
-            'registration_form[second]'=>$plainPassword,
+        $form = $crawler->selectButton('Register')->form([
+            'registration_form[email]' => $email,
+            'registration_form[plainPassword][first]' => $plainPassword,
+            'registration_form[plainPassword][second]' => $plainPassword,
         ]);
 
         $client->submit($form);
@@ -192,21 +192,20 @@ class RegistrationTest extends WebTestCase
     public function testRegistrationWithDifferentPassword(): void
     {
         $client = static::createClient();
-        $crawler=$client->request('GET', '/register');
+        $crawler = $client->request('GET', '/register');
         $email = 'test3@example.com';
 
-        $form=$crawler->selectButton('Register')->form([
-            'registration_form[email]'=>$email,
-            'registration_form[first]'=>'Password1212',
-            'registration_form[second]'=>'NoPassword1213',
-
+        $form = $crawler->selectButton('Register')->form([
+            'registration_form[email]' => $email,
+            'registration_form[plainPassword][first]' => 'Password1212',
+            'registration_form[plainPassword][second]' => 'NoPassword1213',
         ]);
         $client->submit($form);
+
         $this->assertResponseStatusCodeSame(422);
         $this->assertSelectorTextContains('form', 'The passwords do not match.');
-
-
     }
+
     public function testUserRegistration(): void
     {
         $client = static::createClient();
@@ -231,17 +230,17 @@ class RegistrationTest extends WebTestCase
         $user = $userRepository->findOneBy(['email' => $email]);
         $this->assertNotNull($user, 'User was not created');
 
-        // Перевірка ролі користувача (припускаємо, що роль за замовчуванням ROLE_USER)
+
         $this->assertContains('ROLE_USER', $user->getRoles());
 
-        // Перевірка, що пароль хешований і не співпадає з відкритим паролем
+
         $this->assertNotEquals($plainPassword, $user->getPassword());
 
-        // Перевірка, що хешований пароль валідний для введеного plain password
+
         $passwordHasher = $container->get('security.password_hasher');
         $this->assertTrue($passwordHasher->isPasswordValid($user, $plainPassword));
 
-        // Очистка: видаляємо користувача після тесту
+
         $entityManager = $container->get('doctrine')->getManager();
         $entityManager->remove($user);
         $entityManager->flush();

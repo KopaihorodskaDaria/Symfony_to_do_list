@@ -1,0 +1,7 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+<h2>Hello {{ user.email }}!</h2>
+<p>Please confirm your email by clicking the link below:</p>
+<p><a href="{{ linkConfirm }}">{{ linkConfirm }}</a></p>
+{% endblock %}

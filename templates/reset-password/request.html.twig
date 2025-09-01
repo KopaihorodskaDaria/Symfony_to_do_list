@@ -1,0 +1,15 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}You can reset your password here.{% endblock %}
+
+{% block body %}
+
+    {{ form_start(requestForm) }}
+    {{ form_row(requestForm.email) }}
+    <button type="submit" name="submit_reset_email" value="submit_reset_email" class="btn">Send Reset Email</button>
+    {{ form_end(requestForm) }}
+
+
+    <a href="{{ path('app_login') }}">Back to login</a>
+
+{% endblock %}

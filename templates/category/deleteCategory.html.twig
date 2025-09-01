@@ -1,0 +1,30 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <section>
+        <h1>Delete category</h1>
+
+        {% if categories is not empty %}
+            <ul class="category-list">
+                {% for category in categories %}
+                    <li>
+                        {{ category.name }}
+                        <form
+                            action="{{ path('category_delete', {'id': category.id}) }}"
+                            method="post"
+                            class="inline-form"
+                            onsubmit="return confirm('Delete category{{ category.name }}?');"
+                        >
+                            <input type="hidden" name="_token" value="{{ csrf_token('delete-category' ~ category.id) }}">
+                            <button type="submit" class="btn btn-danger">Delete</button>
+                        </form>
+                    </li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p>No categories found.</p>
+        {% endif %}
+
+        <a href="{{ path('task_index') }}" class="btn btn-secondary">Back to tasks</a>
+    </section>
+{% endblock %}

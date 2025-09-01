@@ -1,0 +1,13 @@
+{% extends 'base.html.twig' %}
+
+
+{% block body %}
+    <h2>Password Reset</h2>
+
+    <p>To reset your password, please click the link below:</p>
+
+    <p><a href="{{ resetUrl }}">Reset Password</a></p>
+
+    <p>This link will expire at {{ resetToken.expiresAt|date('Y-m-d H:i') }}.</p>
+
+{% endblock %}

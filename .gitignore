@@ -33,3 +33,10 @@
 /var/log/
 /var/cache/
 ###< Logs and Cache ###
+
+###> phpunit/phpunit ###
+/.phpunit.cache/
+###< phpunit/phpunit ###
+
+/config/secrets/**/private.*.php
+/config/secrets/**/decrypt.private.php

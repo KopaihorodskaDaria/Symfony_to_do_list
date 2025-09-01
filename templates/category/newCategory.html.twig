@@ -1,0 +1,10 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Write a new catehory</h1>
+    {{ form_start(form) }}
+    {{ form_row(form.name) }}
+    <button class="btn btn-primary">Apply</button>
+    {{ form_end(form) }}
+    <a href="{{ path('task_index') }}">Back to tasks</a>
+{% endblock %}

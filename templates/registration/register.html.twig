@@ -6,16 +6,25 @@
     <div class="center-form">
         <h1>Register</h1>
 
-        {{ form_errors(registrationForm) }}
-
         {{ form_start(registrationForm) }}
-        {{ form_row(registrationForm.email) }}
-        {{ form_row(registrationForm.plainPassword, {'label': 'Password'}) }}
-        {{ form_row(registrationForm.agreeTerms) }}
+
+        <div>
+            {{ form_label(registrationForm.email) }}
+            {{ form_widget(registrationForm.email) }}
+            {{ form_errors(registrationForm.email) }}
+        </div>
+
+        <div>
+            {{ form_label(registrationForm.plainPassword) }}
+            {{ form_widget(registrationForm.plainPassword) }}
+            {{ form_errors(registrationForm.plainPassword) }}
+        </div>
+
         <button type="submit">Register</button>
+
         {{ form_end(registrationForm) }}
 
-        <p>Already have account? <a href="{{ path('app_login') }}">Login</a></p>
+        <p>Already have an account? <a href="{{ path('app_login') }}">Login</a></p>
         <p><a href="{{ path('app_home') }}">Back to Home</a></p>
     </div>
 {% endblock %}

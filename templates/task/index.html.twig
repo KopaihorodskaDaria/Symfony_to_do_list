@@ -1,44 +1,110 @@
 {% extends 'base.html.twig' %}
-
-{% block title %}Your Tasks{% endblock %}
+{% block title %}My Tasks{% endblock %}
 
 {% block body %}
-    <h1>Your Tasks</h1>
+    <a href="{{ path('app_logout') }}">Logout</a>
+    <h1 class="mb-4">My Tasks</h1>
 
-    {{ form_start(form) }}
-    {{ form_row(form.title) }}
-    {{ form_row(form.description) }}
-    <button type="submit">Add Task</button>
+    <!-- CATEGORY FILTER -->
+    <form method="get" action="{{ path('task_index') }}" class="mb-4">
+        <label for="category">Filter by category:</label>
+        <select name="category" id="category" onchange="this.form.submit()">
+            <option value="">-- All Categories --</option>
+            {% for cat in categories %}
+                <option value="{{ cat.id }}" {% if app.request.get('category') == cat.id %}selected{% endif %}>
+                    {{ cat.name }}
+                </option>
+            {% endfor %}
+        </select>
+        {% if app.request.get('category') %}
+            <a href="{{ path('task_index') }}" style="margin-left: 10px;">Reset filter</a>
+        {% endif %}
+    </form>
+    <!-- end form -->
+
+    <!-- Search form -->
+    <form method="get" action="{{ path('task_index') }}" class="mb-4">
+        <input type="text" name="search" placeholder="Search tasks"
+               value="{{ searchWord ?? '' }}" class="input-search">
+        <button type="submit">Search</button>
+        {% if searchWord %}
+            <a href="{{ path('task_index') }}" style="margin-left: 10px;">Reset search</a>
+        {% endif %}
+    </form>
+    <!-- end form -->
+
+
+    <!-- POSTS -->
+    <div class="task-board">
+        {% set columns = {'todo': 'To Do', 'in_progress': 'In Progress', 'done': 'Done'} %}
+        {% set now = "now"|date("U") %}
+
+        {% for key, name in columns %}
+            <div class="task-column">
+                <h3>{{ name }}</h3>
+                <ul id="{{ key }}" class="task-list">
+                    {% set columnTasks = tasks|filter(task => task.status == key) %}
+                    {% if columnTasks %}
+                        {% for task in columnTasks %}
+                            {% set deadline = task.deadline ? task.deadline.timestamp : null %}
+                            {% set secondsLeft = deadline ? (deadline - now) : null %}
+                            {% set isUrgent = secondsLeft is not null and secondsLeft < 86400 and secondsLeft > 0 %}
+                            {% set isOverdue = secondsLeft is not null and secondsLeft <= 0 %}
+
+                            <li data-id="{{ task.id }}" class="task-card{% if isOverdue %} task-overdue{% elseif isUrgent %} task-urgent{% endif %}">
+                                <div class="task-details">
+                                    <h5 class="task-title">
+                                        {{ task.title }}
+                                        {% if task.description %}
+                                            <p class="task-description">{{ task.description }}</p>
+                                        {% endif %}
+                                        {% if isOverdue %}❌{% elseif isUrgent %}⚠️{% endif %}
+                                    </h5>
+                                    {% if task.deadline %}
+                                        <small>Deadline: {{ task.deadline|date('Y-m-d H:i') }}</small><br>
+                                    {% endif %}
+                                    {% if task.category %}
+                                        <span>{{ task.category.name }}</span>
+                                    {% endif %}
+                                </div>
+
+                                <div class="task-actions">
+                                    <a href="{{ path('task_edit', {id: task.id}) }}">Edit</a>
+                                    <form action="{{ path('task_delete', {id: task.id}) }}" method="post" onsubmit="return confirm('Are you sure?');">
+                                        <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ task.id) }}">
+                                        <button type="submit">Delete</button>
+                                    </form>
+                                </div>
+                            </li>
+                        {% endfor %}
+                    {% else %}
+                        <li class="no-tasks">No tasks here</li>
+                    {% endif %}
+                </ul>
+            </div>
+        {% endfor %}
+    </div>
+    <a href="{{ path('task_statistic') }}">📊 View Task Statistics</a>
+
+    {{ form_start(form, { 'action': path('task_new'), 'method': 'POST' }) }}
+
+
+    <div class="form-container">
+
+        {{ form_errors(form) }}
+        {{ form_row(form.title) }}
+        {{ form_row(form.description) }}
+        {{ form_row(form.deadline) }}
+        {{ form_row(form.status) }}
+        {{ form_row(form.category) }}
+        
+        <button type="submit">Create</button>
+    </div>
+
     {{ form_end(form) }}
 
-    {% if tasks is empty %}
-        <p>There are no tasks here.</p>
-    {% else %}
-        <ul class="task-list">
-            {% for task in tasks %}
-                <li class="task-card">
-                    <div class="task-details">
-                        <p class="task-title">{{ task.title }}</p>
-                        <p class="task-description">{{ task.description }}</p>
-                        {% if task.isDone %}
-                            <p class="task-status">✓ Completed</p>
-                        {% endif %}
-                    </div>
-                    <div class="task-actions">
-                        <form action="{{ path('task_delete', {id: task.id}) }}" method="post">
-                            <button type="submit">Delete</button>
-                        </form>
-
-                        <a href="{{ path('task_edit', {id: task.id}) }}">Edit</a>
-                    </div>
-                </li>
-            {% endfor %}
-        </ul>
-    {% endif %}
-
-    <a class="logout-link" href="{{ path('app_logout') }}">Logout</a>
+    <div class="links-container">
+        <a href="{{ path('category_new') }}">+Add category</a> |
+        <a href="{{ path('category_list_for_delete') }}">Delete category</a>
+    </div>
 {% endblock %}
-
-
-
-

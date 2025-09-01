@@ -4,14 +4,22 @@
 
 {% block body %}
     <h1>Edit Task</h1>
+    {% for label, messages in app.flashes %}
+        {% for message in messages %}
+            <div class="alert alert-{{ label }}">
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endfor %}
 
     {{ form_start(form) }}
     {{ form_row(form.title) }}
     {{ form_row(form.description) }}
-    {{ form_row(form.isDone) }}
+    {{ form_row(form.deadline) }}
     <button type="submit">Save changes</button>
     {{ form_end(form) }}
 
     <p><a href="{{ path('task_index') }}">Back to list</a></p>
 {% endblock %}
+
 

@@ -1,10 +1,10 @@
 <?php
 
 namespace App\Entity;
-
+use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 use App\Repository\TaskRepository;
 use Doctrine\DBAL\Types\Types;
-use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: TaskRepository::class)]
 class Task
@@ -20,12 +20,24 @@ class Task
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $description = null;
 
-    #[ORM\Column]
-    private ?bool $isDone = null;
+//    #[ORM\Column]
+//    private ?bool $isDone = null;
+    #[Assert\Choice(choices: ['todo', 'in_progress', 'done'], message: 'Choose a valid status.')]
+    #[ORM\Column(length: 50)]
+    private ?string $status = 'todo';
+
+
+    #[ORM\Column(type: 'datetime', nullable: true)]
+    #[Assert\Type("\DateTimeInterface")]
+    private ?\DateTimeInterface $deadline = null;
 
     #[ORM\ManyToOne(inversedBy: 'tasks')]
     #[ORM\JoinColumn(nullable: false)]
     private ?User $user = null;
+
+    #[ORM\ManyToOne(inversedBy: 'tasks')]
+    #[ORM\JoinColumn(onDelete: 'SET NULL')]
+    private ?Category $category = null;
 
     public function getId(): ?int
     {
@@ -56,26 +68,51 @@ class Task
         return $this;
     }
 
-    public function isDone(): ?bool
+    public function getStatus(): ?string
     {
-        return $this->isDone;
+        return $this->status;
     }
 
-    public function setIsDone(bool $isDone): static
+    public function setStatus(string $status): static
     {
-        $this->isDone = $isDone;
+        $this->status = $status;
 
         return $this;
     }
 
-    public function getuser(): ?User
+
+    public function getUser(): ?User
     {
         return $this->user;
     }
 
-    public function setuser(?User $user): static
+    public function getDeadline(): ?\DateTimeInterface
+    {
+        return $this->deadline;
+    }
+
+    public function setDeadline(?\DateTimeInterface $deadline): self
+    {
+        $this->deadline = $deadline;
+
+        return $this;
+    }
+
+    public function setUser(?User $user): static
     {
         $this->user = $user;
+
+        return $this;
+    }
+
+    public function getCategory(): ?Category
+    {
+        return $this->category;
+    }
+
+    public function setCategory(?Category $category): static
+    {
+        $this->category = $category;
 
         return $this;
     }

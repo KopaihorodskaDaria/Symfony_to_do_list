@@ -4,13 +4,32 @@
     <meta charset="UTF-8">
     <title>{% block title %}To Do List{% endblock %}</title>
     <link rel="stylesheet" href="{{ asset('css/style.css') }}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+
+    {% block stylesheets %}{% endblock %}
 </head>
 <body>
 <main>
+
+    {% for label, messages in app.flashes %}
+        {% for message in messages %}
+            <div class="alert alert-{{ label }}">
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endfor %}
+
+
     {% block body %}{% endblock %}
+
+    <script src="{{ asset('js/script.js') }}"></script>
+    <script src="{{ asset('js/diagram.js') }}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js"></script>
+
+    {% block javascripts %}{% endblock %}
 </main>
 </body>
 </html>
-
 
 
