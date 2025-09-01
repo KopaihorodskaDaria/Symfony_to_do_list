@@ -1,6 +1,7 @@
 # Symfony ToDo App
 A task management web application built with **Symfony**.  
 This project offers user-friendly features including registration, login, email verification, password reset, and task management. Users can create, edit, categorize, filter, and reorder their tasks with drag & drop support. Overdue tasks are highlighted visually, and a statistics page provides an overview of task statuses.
+![Demo](assets/demo/demo.gif)
 
 **Key Features:**
 * User registration & login
